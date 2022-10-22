@@ -37,6 +37,25 @@ app.post('/login', (req,res) => {
   return res.status(401).send(`User not logged in.`)
 });
 
+app.put('/api/people/:id', (req,res) => {
+  const { id } = req.params;
+  const { name } = req.body;
+  const person = people.find((someone) => someone.id === Number(id));
+  if(!person) {
+    return res.status(404).json({success:false, msg: 'Person not found'})
+  }
+  const newPeople = people.map((x) => {
+    if (x.id === Number(id)) {
+      x.name = name;
+    }
+
+    return x
+  })
+  return res.status(200).json({success:true, data: newPeople})
+})
+
+
+
 app.listen(5000, () => {
   console.log('Server is listening on port 5000...'.blue)
 })
